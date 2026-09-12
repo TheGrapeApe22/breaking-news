@@ -3,12 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Webpage Title</title>
+    <title>Title</title>
 </head>
 <body>
 
-    <h1>Welcome to My Website</h1>
-    <p>This is where your main body content goes.</p>
+    <h1 id="title">Title text</h1>
+    <p id="body">Body text</p>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const title = params.get('title');
+        const body = params.get('body');
+
+        if (title !== null) {
+            document.title = title;
+            document.getElementById('title').textContent = title;
+        }
+
+        if (body !== null) {
+            document.getElementById('body').textContent = body;
+        }
+    </script>
 
 </body>
 </html>
