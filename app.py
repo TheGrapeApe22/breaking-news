@@ -12,22 +12,26 @@ PAGE = """<!doctype html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ title }}</title>
+    <title>Redirect Notice</title>
     <meta property="og:title" content="{{ title }}">
     <meta property="og:description" content="{{ description }}">
     <meta property="og:image" content="{{ image }}">
-    <meta property="og:url" content="{{ page_url }}">
-    <meta property="og:site_name" content="{{ site_name }}">
     <meta property="og:type" content="website">
+    {% if large_image %}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ title }}">
-    <meta name="twitter:description" content="{{ description }}">
-    <meta name="twitter:image" content="{{ image }}">
+    {% endif %}
     <link rel="alternate" type="application/json+oembed" href="{{ oembed_url }}">
   </head>
-  <body></body>
-</html>
-"""
+  <body>
+    <b>Redirect notice</b>
+    <p style="text-indent: 40px;">
+      This page is trying to redirect you to <a href="https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html">{{ appear_url }}</a>.
+    </p>
+    <p style="text-indent: 40px;">
+      If you do not want to visit that page, you can <a href="https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html">return to the previous page</a>.
+    </p>
+  </body>
+</html>"""
 
 
 def valid_image_url(value: str) -> bool:
@@ -56,6 +60,8 @@ def preview():
     description = request.args.get("description", request.args.get("body", ""))
     image = request.args.get("image", "").strip()
     site_name = request.args.get("site_name", "").strip()
+    appear_url = request.args.get("appear_url", "").strip()
+    large_image = request.args.get("large_image", "").strip().lower() != "false"
     oembed_params = {
         "author_name": request.args.get("author_name", ""),
         "provider_name": request.args.get("provider_name", ""),
@@ -79,6 +85,8 @@ def preview():
         site_name=site_name,
         page_url=page_url,
         oembed_url=oembed_url,
+        large_image=bool(large_image),
+        appear_url=appear_url if appear_url else 'https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html',
     )
 
 
