@@ -28,6 +28,24 @@ when supplied, must be an absolute HTTP or HTTPS URL that Discord can reach. The
 returned page deliberately has an empty body, matching the supplied `index.html`;
 its visible content is blank.
 
+## oEmbed metadata
+
+The preview page accepts optional `author_name`, `provider_name`, `author_url`, and
+`provider_url` parameters. It adds an oEmbed discovery link whose URL forwards
+those values to `/oembed.json`.
+
+`/oembed.json` returns the supplied author and provider metadata:
+
+```text
+http://127.0.0.1:8000/oembed.json?author=aaaa&provider=bbbb&author_url=https%3A%2F%2Fexample.com%2Fauthor&provider_url=https%3A%2F%2Fexample.com
+```
+
+It responds with:
+
+```json
+{"author_name":"aaaa","author_url":"https://example.com/author","provider_name":"bbbb","provider_url":"https://example.com"}
+```
+
 Discord caches previews aggressively. Use a newly generated link (for example,
 add a harmless `v` parameter) when testing a changed preview.
 
