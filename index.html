@@ -3,48 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
+    
+    <meta property="og:title" content="My Website">
+    <meta property="og:description" content="This is the description that will appear in Discord.">
+    <meta property="og:image" content="https://api.memegen.link/images/custom/Title_text.png?background=https://images.ctfassets.net/kftzwdyauwt9/3Bq4IgdtzTZhLjuPSertNj/6efab24db5048285722072ec40b9d6e1/oai_Introducing_AI_Stories_16.9.png%3Fw%3D3840%26q%3D90%26fm%3Dwebp&layout=top&font=notosans">
+    <meta property="og:url" content="https://example.com/">
+    
+    <meta property="og:type" content="website">
+    <title>My Website</title>
 </head>
-<body>
-
-    <h1 id="title">Title text</h1>
-    <p id="body">Body text</p>
-    <img id="title-image" alt="Generated image with the title text" hidden>
-
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const title = params.get('title');
-        const body = params.get('body');
-        const defaultBackground = 'https://images.ctfassets.net/kftzwdyauwt9/3Bq4IgdtzTZhLjuPSertNj/6efab24db5048285722072ec40b9d6e1/oai_Introducing_AI_Stories_16.9.png?w=3840&q=90&fm=webp';
-        const background = params.get('background-image') || defaultBackground;
-        const titleImage = document.getElementById('title-image');
-
-        function memegenText(text) {
-            // Memegen uses underscores and hyphens as formatting characters.
-            return encodeURIComponent(text
-                .replace(/_/g, '__')
-                .replace(/-/g, '--')
-                .replace(/\n/g, '~n'));
-        }
-
-        function updateTitleImage(text) {
-            const imageText = memegenText(text || 'Title text');
-
-            titleImage.src = `https://api.memegen.link/images/custom/${imageText}/_.png?background=${encodeURIComponent(background)}&layout=top&font=notosans`;
-            titleImage.hidden = false;
-        }
-
-        if (title !== null) {
-            document.title = title;
-            document.getElementById('title').textContent = title;
-        }
-
-        if (body !== null) {
-            document.getElementById('body').textContent = body;
-        }
-
-        updateTitleImage(title ?? document.getElementById('title').textContent);
-    </script>
-
-</body>
 </html>
