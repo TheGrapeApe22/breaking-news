@@ -1,8 +1,8 @@
 """A tiny server-side Open Graph preview page for Discord links."""
 
-from urllib.parse import urlparse
+from urllib.parse import urlencode, urlparse
 
-from flask import Flask, abort, render_template_string, request
+from flask import Flask, abort, jsonify, render_template_string, request
 
 app = Flask(__name__)
 
@@ -23,6 +23,7 @@ PAGE = """<!doctype html>
     <meta name="twitter:title" content="{{ title }}">
     <meta name="twitter:description" content="{{ description }}">
     <meta name="twitter:image" content="{{ image }}">
+    <link rel="alternate" type="application/json+oembed" href="{{ oembed_url }}">
   </head>
   <body></body>
 </html>
@@ -37,6 +38,17 @@ def valid_image_url(value: str) -> bool:
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
 
 
+@app.get("/oembed.json")
+def oembed():
+    """Return the oEmbed author and provider names supplied by the caller."""
+    return jsonify(
+        author_name=request.args.get("author_name", ""),
+        author_url=request.args.get("author_url", ""),
+        provider_name=request.args.get("provider_name", ""),
+        provider_url=request.args.get("provider_url", ""),
+    )
+
+
 @app.get("/")
 def preview():
     title = request.args.get("title", "").strip()
@@ -44,6 +56,12 @@ def preview():
     description = request.args.get("description", request.args.get("body", ""))
     image = request.args.get("image", "").strip()
     site_name = request.args.get("site_name", "").strip()
+    oembed_params = {
+        "author_name": request.args.get("author_name", ""),
+        "provider_name": request.args.get("provider_name", ""),
+        "author_url": request.args.get("author_url", ""),
+        "provider_url": request.args.get("provider_url", ""),
+    }
 
     if not title:
         abort(400, "The title query parameter is required.")
@@ -52,6 +70,7 @@ def preview():
 
     # Exclude the request's query string: it can contain arbitrary user input.
     page_url = request.url_root.rstrip("/") + request.path
+    oembed_url = request.url_root.rstrip("/") + "/oembed.json?" + urlencode(oembed_params)
     return render_template_string(
         PAGE,
         title=title,
@@ -59,6 +78,7 @@ def preview():
         image=image,
         site_name=site_name,
         page_url=page_url,
+        oembed_url=oembed_url,
     )
 
 
