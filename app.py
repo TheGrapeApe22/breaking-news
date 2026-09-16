@@ -69,8 +69,6 @@ def preview():
         "provider_url": request.args.get("provider_url", ""),
     }
 
-    if not title:
-        abort(400, "The title query parameter is required.")
     if not valid_image_url(image):
         abort(400, "image must be an absolute http(s) URL.")
 
