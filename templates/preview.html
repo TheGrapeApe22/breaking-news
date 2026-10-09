@@ -19,7 +19,7 @@
     {% endif %}
 
     {% if color %}
-    <meta name="theme-color" content="#{{ '%06x' % color }}">
+    <meta name="theme-color" content="{{ color }}">
     {% endif %}
     
     {% if (not is_video or is_video|lower == "false") and large_image|lower == "true" %}
