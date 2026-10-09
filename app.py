@@ -2,36 +2,9 @@
 
 from urllib.parse import urlencode, urlparse
 
-from flask import Flask, abort, jsonify, render_template_string, request
+from flask import Flask, abort, jsonify, render_template, request
 
 app = Flask(__name__)
-
-
-PAGE = """<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Redirect Notice</title>
-    <meta property="og:title" content="{{ title }}">
-    <meta property="og:description" content="{{ description }}">
-    <meta property="og:image" content="{{ image }}">
-    <meta property="og:type" content="website">
-    {% if large_image %}
-    <meta name="twitter:card" content="summary_large_image">
-    {% endif %}
-    <link rel="alternate" type="application/json+oembed" href="{{ oembed_url }}">
-  </head>
-  <body>
-    <b>Redirect notice</b>
-    <p style="text-indent: 40px;">
-      This page is trying to redirect you to <a href="https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html">{{ appear_url }}</a>.
-    </p>
-    <p style="text-indent: 40px;">
-      If you do not want to visit that page, you can <a href="https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html">return to the previous page</a>.
-    </p>
-  </body>
-</html>"""
 
 
 def valid_image_url(value: str) -> bool:
@@ -75,8 +48,8 @@ def preview():
     # Exclude the request's query string: it can contain arbitrary user input.
     page_url = request.url_root.rstrip("/") + request.path
     oembed_url = request.url_root.rstrip("/") + "/oembed.json?" + urlencode(oembed_params)
-    return render_template_string(
-        PAGE,
+    return render_template(
+        "preview.html",
         title=title,
         description=description,
         image=image,
