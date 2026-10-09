@@ -4,19 +4,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Redirect Notice</title>
+
     <meta property="og:title" content="{{ title }}">
     <meta property="og:description" content="{{ description }}">
     <meta property="og:image" content="{{ image }}">
-    <meta property="og:type" content="website">
-    {% if large_image %}
+    
+    {% if is_video|lower == "true" %}
+    <meta property="og:type" content="video.other">
+    <meta property="og:video:url" content="https://www.youtube.com/embed/dQw4w9WgXcQ">
+    <!-- <meta property="og:video:width" content="{{ video_width if video_width else '1280' }}">
+    <meta property="og:video:height" content="{{ video_height if video_height else '720' }}">
+    <meta property="og:image:width" content="{{ image.width if image.width else '1280' }}">
+    <meta property="og:image:height" content="{{ image.height if image.height else '720' }}"> -->
+    {% endif %}
+
+    {% if color %}
+    <meta name="theme-color" content="#{{ '%06x' % color }}">
+    {% endif %}
+    
+    {% if is_video|lower == "false" and large_image|lower != "false" %}
     <meta name="twitter:card" content="summary_large_image">
     {% endif %}
+    
     <link rel="alternate" type="application/json+oembed" href="{{ oembed_url }}">
   </head>
+
   <body>
     <b>Redirect notice</b>
     <p style="text-indent: 40px;">
-      This page is trying to redirect you to <a href="https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html">{{ appear_url }}</a>.
+      This page is trying to redirect you to <a href="https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html">{{ appear_url if appear_url else message_text if message_text else "https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html" }}</a>.
     </p>
     <p style="text-indent: 40px;">
       If you do not want to visit that page, you can <a href="https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html">return to the previous page</a>.
