@@ -22,7 +22,7 @@
     <meta name="theme-color" content="#{{ '%06x' % color }}">
     {% endif %}
     
-    {% if is_video|lower == "false" and large_image|lower != "false" %}
+    {% if (not is_video or is_video|lower == "false") and large_image|lower == "true" %}
     <meta name="twitter:card" content="summary_large_image">
     {% endif %}
     
